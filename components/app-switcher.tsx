@@ -2,8 +2,8 @@
 
 import { cn } from "@/lib/utils";
 import { ChevronsUpDown } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
 import * as React from "react";
-import { usePathname } from "next/navigation";
 
 import {
   DropdownMenu,
@@ -18,7 +18,6 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import Link from "next/link";
 
 export function AppSwitcher({
   apps,
@@ -33,6 +32,7 @@ export function AppSwitcher({
   const { isMobile } = useSidebar();
   const [activeApp, setActiveApp] = React.useState(apps[0]);
   const pathname = usePathname();
+  const router = useRouter();
   const appURLS = apps.map((app) => app.url);
 
   React.useEffect(() => {
@@ -88,18 +88,16 @@ export function AppSwitcher({
             {apps.map((app) => (
               <DropdownMenuItem
                 key={app.name}
-                onClick={() => setActiveApp(app)}
+                onClick={() => router.push(app.url)}
                 className={cn(
                   "gap-2 p-2 cursor-pointer",
                   pathname?.startsWith(app.url) ? "bg-muted" : "",
                 )}
               >
-                <Link href={app.url} className="flex items-center gap-2">
-                  <div className="flex size-6 items-center justify-center rounded-sm border">
-                    <app.logo className="size-4 shrink-0" />
-                  </div>
-                  {app.name}
-                </Link>
+                <div className="flex size-6 items-center justify-center rounded-sm border">
+                  <app.logo className="size-4 shrink-0" />
+                </div>
+                {app.name}
               </DropdownMenuItem>
             ))}
           </DropdownMenuContent>
