@@ -1,12 +1,13 @@
+import { HabitDialog } from "@/components/habits/HabitDialog";
+
 export default function HabitsPage() {
   return (
-    <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-      <div className="grid auto-rows-min gap-4 md:grid-cols-3">
-        <div className="aspect-video rounded-xl bg-muted/50" />
-        <div className="aspect-video rounded-xl bg-muted/50" />
-        <div className="aspect-video rounded-xl bg-muted/50" />
+    <div className="flex flex-1 flex-col gap-4 p-4 pt-0 justify-center items-center">
+      <div className="w-full max-w-4xl bg-muted h-full flex flex-col gap-4">
+        <div className="flex flex-row-reverse p-4">
+          <HabitDialog />
+        </div>
       </div>
-      <div className="min-h-[100vh] flex-1 rounded-xl bg-muted/50 md:min-h-min" />
     </div>
   );
 }
