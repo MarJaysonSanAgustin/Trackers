@@ -21,6 +21,7 @@ import {
   DialogContent,
   DialogTitle,
 } from "../ui/dialog";
+import { CheckIcon } from "lucide-react";
 
 export default function HabitForm() {
   const form = useForm<z.infer<typeof HABIT_FORM_SCHEMA>>({
@@ -47,7 +48,7 @@ export default function HabitForm() {
         <DialogTitle>New Habit</DialogTitle>
       </DialogHeader>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <FormField
             control={form.control}
             name="name"
@@ -76,33 +77,39 @@ export default function HabitForm() {
             )}
           />
 
-          <FormField
-            control={form.control}
-            name="streakGoal"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Streak Goal</FormLabel>
-                <FormControl>
-                  <Input placeholder="Streak Goal" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          <div className="flex gap-4">
+            <div className="w-full">
+              <FormField
+                control={form.control}
+                name="streakGoal"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Streak Goal</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Streak Goal" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
 
-          <FormField
-            control={form.control}
-            name="reminder"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Reminder</FormLabel>
-                <FormControl>
-                  <Input placeholder="Reminder" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            <div className="w-full">
+              <FormField
+                control={form.control}
+                name="reminder"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Reminder</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Reminder" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+          </div>
 
           <FormField
             control={form.control}
@@ -160,7 +167,9 @@ export default function HabitForm() {
             )}
           />
           <DialogFooter>
-            <Button type="submit">Submit</Button>
+            <Button type="submit">
+              <CheckIcon /> Submit
+            </Button>
           </DialogFooter>
         </form>
       </Form>
