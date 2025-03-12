@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { Input } from "@/components/ui/input";
-import { HABIT_FORM_SCHEMA } from "@/constants/habit-form.schema";
+import { HABIT_FORM_SCHEMA, StreakGoals } from "@/constants/habit-form.schema";
 import { Button } from "../ui/button";
 import {
   Form,
@@ -21,7 +21,14 @@ import {
   DialogContent,
   DialogTitle,
 } from "../ui/dialog";
-import { CheckIcon } from "lucide-react";
+import { CheckIcon, PlusIcon, MinusIcon } from "lucide-react";
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select";
 
 export default function HabitForm() {
   const form = useForm<z.infer<typeof HABIT_FORM_SCHEMA>>({
@@ -29,10 +36,9 @@ export default function HabitForm() {
     defaultValues: {
       name: "",
       description: "",
-      streakGoal: "",
-      reminder: "",
+      streakGoal: StreakGoals.Daily,
       categories: "",
-      completionsPerDay: "",
+      completionsPerDay: 1,
       icon: "",
       color: "",
     },
@@ -85,29 +91,63 @@ export default function HabitForm() {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Streak Goal</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Streak Goal" {...field} />
-                    </FormControl>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue
+                            placeholder="Select Interval"
+                            className="capitalize"
+                          />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {Object.values(StreakGoals).map((streakGoal) => (
+                          <SelectItem
+                            key={streakGoal}
+                            value={streakGoal}
+                            className="capitalize"
+                          >
+                            {streakGoal}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                     <FormMessage />
                   </FormItem>
                 )}
               />
             </div>
 
-            <div className="w-full">
+            <div className="w-full flex gap-2 items-end">
               <FormField
                 control={form.control}
-                name="reminder"
+                name="completionsPerDay"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Reminder</FormLabel>
+                    <FormLabel>Completions Per Day</FormLabel>
                     <FormControl>
-                      <Input placeholder="Reminder" {...field} />
+                      <Input
+                        placeholder="Completions Per Day"
+                        {...field}
+                        type="number"
+                        min={1}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
+              <div className="flex gap-1">
+                <Button type="button" disabled>
+                  <MinusIcon />
+                </Button>
+                <Button type="button">
+                  <PlusIcon />
+                </Button>
+              </div>
             </div>
           </div>
 
@@ -119,20 +159,6 @@ export default function HabitForm() {
                 <FormLabel>Categories</FormLabel>
                 <FormControl>
                   <Input placeholder="Categories" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="completionsPerDay"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Completions Per Day</FormLabel>
-                <FormControl>
-                  <Input placeholder="Completions Per Day" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
