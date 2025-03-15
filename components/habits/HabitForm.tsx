@@ -1,12 +1,27 @@
 "use client";
 
+import React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { HABIT_FORM_SCHEMA, StreakGoals } from "@/constants/habit-form.schema";
+import { CheckIcon } from "lucide-react";
 import { Button } from "../ui/button";
+import {
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "../ui/dialog";
 import {
   Form,
   FormControl,
@@ -15,22 +30,11 @@ import {
   FormLabel,
   FormMessage,
 } from "../ui/form";
-import {
-  DialogHeader,
-  DialogFooter,
-  DialogContent,
-  DialogTitle,
-} from "../ui/dialog";
-import { CheckIcon, PlusIcon, MinusIcon } from "lucide-react";
-import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectItem,
-} from "@/components/ui/select";
+import CompletionsPerDayButtons from "./CompletionsPerDayButtons";
+import { InputTags } from "../ui/input-tags";
 
 export default function HabitForm() {
+  const [values, setValues] = React.useState<string[]>([]);
   const form = useForm<z.infer<typeof HABIT_FORM_SCHEMA>>({
     resolver: zodResolver(HABIT_FORM_SCHEMA),
     defaultValues: {
@@ -47,6 +51,10 @@ export default function HabitForm() {
   function onSubmit(values: z.infer<typeof HABIT_FORM_SCHEMA>) {
     console.log(values);
   }
+
+  const handleCompletionsPerDayMutatorChange = (value: number) => {
+    form.setValue("completionsPerDay", value);
+  };
 
   return (
     <DialogContent className="sm:max-w-2xl">
@@ -105,11 +113,7 @@ export default function HabitForm() {
                       </FormControl>
                       <SelectContent>
                         {Object.values(StreakGoals).map((streakGoal) => (
-                          <SelectItem
-                            key={streakGoal}
-                            value={streakGoal}
-                            className="capitalize"
-                          >
+                          <SelectItem key={streakGoal} value={streakGoal}>
                             {streakGoal}
                           </SelectItem>
                         ))}
@@ -134,20 +138,17 @@ export default function HabitForm() {
                         {...field}
                         type="number"
                         min={1}
+                        readOnly
                       />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              <div className="flex gap-1">
-                <Button type="button" disabled>
-                  <MinusIcon />
-                </Button>
-                <Button type="button">
-                  <PlusIcon />
-                </Button>
-              </div>
+              <CompletionsPerDayButtons
+                form={form}
+                onChange={handleCompletionsPerDayMutatorChange}
+              />
             </div>
           </div>
 
@@ -158,7 +159,13 @@ export default function HabitForm() {
               <FormItem>
                 <FormLabel>Categories</FormLabel>
                 <FormControl>
-                  <Input placeholder="Categories" {...field} />
+                  <InputTags
+                    {...field}
+                    value={values}
+                    onChange={setValues}
+                    placeholder="Enter values, comma separated..."
+                    className="max-w-[500px]"
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
