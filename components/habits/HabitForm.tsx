@@ -1,27 +1,16 @@
 "use client";
 
-import React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { HABIT_FORM_SCHEMA, StreakGoals } from "@/constants/habit-form.schema";
-import { CheckIcon } from "lucide-react";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 import {
   DialogContent,
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "../ui/dialog";
+} from "@/components/ui/dialog";
 import {
   Form,
   FormControl,
@@ -29,19 +18,33 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../ui/form";
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import MultipleSelect from "@/components/ui/multiple-select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  CATEGORIES_OPTIONS,
+  COLOR_OPTIONS,
+  HABIT_FORM_SCHEMA,
+  StreakGoals,
+} from "@/constants/habit-form.schema";
+import { CheckIcon } from "lucide-react";
 import CompletionsPerDayButtons from "./CompletionsPerDayButtons";
-import { InputTags } from "../ui/input-tags";
 
 export default function HabitForm() {
-  const [values, setValues] = React.useState<string[]>([]);
   const form = useForm<z.infer<typeof HABIT_FORM_SCHEMA>>({
     resolver: zodResolver(HABIT_FORM_SCHEMA),
     defaultValues: {
       name: "",
       description: "",
       streakGoal: StreakGoals.Daily,
-      categories: "",
+      categories: [],
       completionsPerDay: 1,
       icon: "",
       color: "",
@@ -105,16 +108,13 @@ export default function HabitForm() {
                     >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue
-                            placeholder="Select Interval"
-                            className="capitalize"
-                          />
+                          <SelectValue placeholder="Select Interval" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
                         {Object.values(StreakGoals).map((streakGoal) => (
                           <SelectItem key={streakGoal} value={streakGoal}>
-                            {streakGoal}
+                            <div className="capitalize">{streakGoal}</div>
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -159,12 +159,10 @@ export default function HabitForm() {
               <FormItem>
                 <FormLabel>Categories</FormLabel>
                 <FormControl>
-                  <InputTags
+                  <MultipleSelect
                     {...field}
-                    value={values}
-                    onChange={setValues}
-                    placeholder="Enter values, comma separated..."
-                    className="max-w-[500px]"
+                    defaultOptions={CATEGORIES_OPTIONS}
+                    placeholder="Organize habits by categorizing them"
                   />
                 </FormControl>
                 <FormMessage />
@@ -172,33 +170,59 @@ export default function HabitForm() {
             )}
           />
 
-          <FormField
-            control={form.control}
-            name="icon"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Icon</FormLabel>
-                <FormControl>
-                  <Input placeholder="Icon" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          <div className="flex gap-4">
+            <div className="w-full">
+              <FormField
+                control={form.control}
+                name="icon"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Icon</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Icon" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
 
-          <FormField
-            control={form.control}
-            name="color"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Color</FormLabel>
-                <FormControl>
-                  <Input placeholder="Color" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            <div className="w-full">
+              <FormField
+                control={form.control}
+                name="color"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Color</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a color" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {[...COLOR_OPTIONS].map((color) => (
+                          <SelectItem key={color.value} value={color.value}>
+                            <div className="flex gap-2 items-center">
+                              <div
+                                className={`${color.value} w-4 h-4 rounded`}
+                              />
+                              <span className="capitalize">{color.label}</span>
+                            </div>
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+          </div>
+
           <DialogFooter>
             <Button type="submit">
               <CheckIcon /> Submit
