@@ -1,0 +1,135 @@
+export enum IconCategory {
+  Text = "text",
+  Design = "design",
+  Layout = "layout",
+  Navigation = "navigation",
+  Social = "social",
+}
+
+export type IconList = {
+  name: string;
+  categories: string[];
+  tags: string[];
+};
+
+export const iconsData: Array<IconList> = [
+  {
+    name: "award",
+    categories: ["sports"],
+    tags: ["achievement", "badge", "rosette", "prize", "winner"],
+  },
+  {
+    name: "circle-gauge",
+    categories: ["sports"],
+    tags: [
+      "dashboard",
+      "dial",
+      "meter",
+      "speed",
+      "pressure",
+      "measure",
+      "level",
+    ],
+  },
+  {
+    name: "dumbbell",
+    categories: ["sports"],
+    tags: ["barbell", "weight", "workout", "gym"],
+  },
+  {
+    name: "gauge",
+    categories: ["sports"],
+    tags: [
+      "dashboard",
+      "dial",
+      "meter",
+      "speed",
+      "pressure",
+      "measure",
+      "level",
+    ],
+  },
+  {
+    name: "land-plot",
+    categories: ["sports"],
+    tags: [
+      "area",
+      "surface",
+      "square metres",
+      "allotment",
+      "parcel",
+      "property",
+      "plane",
+      "acres",
+      "measure",
+      "distance",
+      "isometric",
+      "flag",
+      "golf course",
+      "hole",
+    ],
+  },
+  {
+    name: "medal",
+    categories: ["sports"],
+    tags: ["prize", "sports", "winner", "trophy", "award", "achievement"],
+  },
+  {
+    name: "trophy",
+    categories: ["sports"],
+    tags: [
+      "prize",
+      "sports",
+      "winner",
+      "achievement",
+      "award",
+      "champion",
+      "celebration",
+      "victory",
+    ],
+  },
+  {
+    name: "volleyball",
+    categories: ["sports"],
+    tags: [
+      "beach",
+      "sand",
+      "net",
+      "holiday",
+      "vacation",
+      "summer",
+      "soccer",
+      "football",
+      "futbol",
+      "kick",
+      "pitch",
+      "goal",
+      "score",
+      "bounce",
+      "leather",
+      "wool",
+      "yarn",
+      "knitting",
+      "sewing",
+      "thread",
+      "embroidery",
+      "textile",
+    ],
+  },
+  {
+    name: "waves-ladder",
+    categories: ["sports"],
+    tags: [
+      "swimming",
+      "water",
+      "pool",
+      "lifeguard",
+      "ocean",
+      "🌊",
+      "🏊‍♂️",
+      "🏊‍♀️",
+      "🏊",
+      "🥽",
+    ],
+  },
+];
