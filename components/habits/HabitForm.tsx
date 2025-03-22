@@ -36,6 +36,8 @@ import {
 } from "@/constants/habit-form.schema";
 import { CheckIcon } from "lucide-react";
 import CompletionsPerDayButtons from "./CompletionsPerDayButtons";
+import { IconName, IconPicker, Icon } from "../ui/icon-picker";
+import { iconsData } from "../ui/icons";
 
 export default function HabitForm() {
   const form = useForm<z.infer<typeof HABIT_FORM_SCHEMA>>({
@@ -177,9 +179,20 @@ export default function HabitForm() {
                 name="icon"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Icon</FormLabel>
                     <FormControl>
-                      <Input placeholder="Icon" {...field} />
+                      <IconPicker
+                        onValueChange={field.onChange}
+                        defaultValue={field.value as IconName}
+                        iconsList={iconsData}
+                      >
+                        <Button className="w-full h-full">
+                          {field.value ? (
+                            <Icon name={field.value as IconName} />
+                          ) : (
+                            "Select Icon"
+                          )}
+                        </Button>
+                      </IconPicker>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
