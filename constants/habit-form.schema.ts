@@ -21,14 +21,17 @@ const CATEGORIES_SCHEMA = z.object({
 });
 
 export const HABIT_FORM_SCHEMA = z.object({
-  name: z.string().min(2).max(50),
-  description: z.string().min(2).max(50),
+  name: z.string().min(2, { message: "Name is required" }).max(50),
+  description: z
+    .string()
+    .min(2, { message: "Description is required" })
+    .max(50),
   streakGoal: StreakGoalsEnum.default(StreakGoals.Daily),
   completionsPerStreak: z.number().min(1).max(31).default(1),
-  categories: z.array(CATEGORIES_SCHEMA).min(1),
+  categories: z.array(CATEGORIES_SCHEMA),
   completionsPerDay: z.number().min(1).default(1),
-  icon: z.string().min(2).max(50),
-  color: z.string().min(2).max(50),
+  icon: z.string().min(2, { message: "Icon is required" }).max(50),
+  color: z.string().min(2, { message: "Color is required" }).max(50),
 });
 
 export const CATEGORIES_OPTIONS: Option[] = [
