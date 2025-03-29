@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { signUp } from "@/app/lib/auth-client";
 import { Button } from "@/components/ui/button";
 import {
@@ -16,6 +17,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
+import { Separator } from "./ui/separator";
 
 export default function SignUp() {
   const [firstName, setFirstName] = useState("");
@@ -178,6 +180,18 @@ export default function SignUp() {
               "Create an account"
             )}
           </Button>
+          <Separator />
+          <div className="flex justify-center">
+            <div>
+              Already registered?{" "}
+              <Link
+                href="/sign-in"
+                className="ml-auto inline-block text-sm underline"
+              >
+                Sign In
+              </Link>
+            </div>
+          </div>
         </div>
       </CardContent>
     </Card>

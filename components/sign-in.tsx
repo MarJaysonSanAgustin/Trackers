@@ -19,6 +19,7 @@ import Link from "next/link";
 import { useState } from "react";
 
 import { toast } from "sonner";
+import { Separator } from "./ui/separator";
 
 export default function SignIn() {
   const [email, setEmail] = useState("");
@@ -37,80 +38,96 @@ export default function SignIn() {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="grid gap-4">
-          <div className="grid gap-2">
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="m@example.com"
-              required
-              onChange={(e) => {
-                setEmail(e.target.value);
-              }}
-              value={email}
-            />
-          </div>
-
-          <div className="grid gap-2">
-            <div className="flex items-center">
-              <Label htmlFor="password">Password</Label>
-              <Link href="#" className="ml-auto inline-block text-sm underline">
-                Forgot your password?
-              </Link>
+        <form>
+          <div className="grid gap-4">
+            <div className="grid gap-2">
+              <Label htmlFor="email">Email</Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="m@example.com"
+                required
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                }}
+                value={email}
+              />
             </div>
 
-            <Input
-              id="password"
-              type="password"
-              placeholder="password"
-              autoComplete="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
+            <div className="grid gap-2">
+              <div className="flex items-center">
+                <Label htmlFor="password">Password</Label>
+              </div>
 
-          <div className="flex items-center gap-2">
-            <Checkbox
-              id="remember"
-              onClick={() => {
-                setRememberMe(!rememberMe);
+              <Input
+                id="password"
+                type="password"
+                placeholder="password"
+                autoComplete="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
+
+            <div className="flex items-center gap-2">
+              <Checkbox
+                id="remember"
+                onClick={() => {
+                  setRememberMe(!rememberMe);
+                }}
+              />
+              <Label htmlFor="remember">Remember me</Label>
+            </div>
+
+            <Button
+              type="submit"
+              className="w-full"
+              disabled={loading}
+              onClick={async () => {
+                await signIn.email(
+                  {
+                    email,
+                    password,
+                    rememberMe,
+                    callbackURL: "/tracker/habits",
+                  },
+                  {
+                    onRequest: () => {
+                      setLoading(true);
+                    },
+                    onResponse: () => {
+                      setLoading(false);
+                    },
+                    onError: (ctx) => {
+                      toast.error(ctx.error.message);
+                    },
+                    onSuccess: async () => {
+                      router.push("/tracker/habits");
+                    },
+                  },
+                );
               }}
-            />
-            <Label htmlFor="remember">Remember me</Label>
+            >
+              {loading ? (
+                <Loader2 size={16} className="animate-spin" />
+              ) : (
+                "Login"
+              )}
+            </Button>
+            <Separator />
+            <div className="flex justify-center">
+              <div>
+                Not yet registered?{" "}
+                <Link
+                  href="/sign-up"
+                  className="ml-auto inline-block text-sm underline"
+                >
+                  Sign Up
+                </Link>
+              </div>
+            </div>
           </div>
-
-          <Button
-            type="submit"
-            className="w-full"
-            disabled={loading}
-            onClick={async () => {
-              await signIn.email(
-                {
-                  email,
-                  password,
-                  callbackURL: "/tracker/habits",
-                },
-                {
-                  onRequest: () => {
-                    setLoading(true);
-                  },
-                  onResponse: () => {
-                    setLoading(false);
-                  },
-                  onError: (ctx) => {
-                    toast.error(ctx.error.message);
-                  },
-                  onSuccess: async () => {
-                    router.push("/tracker/habits");
-                  },
-                },
-              );
-            }}
-          >
-            {loading ? <Loader2 size={16} className="animate-spin" /> : "Login"}
-          </Button>
-        </div>
+        </form>
       </CardContent>
     </Card>
   );
